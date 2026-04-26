@@ -10,12 +10,12 @@
   <link rel="canonical" href="https://scotworks.com/">
 
   <!-- Favicons -->
-  <link rel="icon" type="image/png" href="/favicon-96x96.png?v=20260426" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260426" />
-  <link rel="shortcut icon" href="/favicon.ico?v=20260426" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=20260426" />
+  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png?v=20260427" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg?v=20260427" />
+  <link rel="shortcut icon" href="/favicon/favicon.ico?v=20260427" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png?v=20260427" />
   <meta name="apple-mobile-web-app-title" content="Scotworks" />
-  <link rel="manifest" href="/site.webmanifest?v=20260426" />
+  <link rel="manifest" href="/favicon/site.webmanifest?v=20260427" />
 
   <!-- Open Graph — controls link previews on LinkedIn, iMessage, Slack, etc. -->
   <meta property="og:type"        content="website">
@@ -350,7 +350,13 @@
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--ink-faint);
-      padding: 1.75rem 3.5rem;
+      padding: 1.75rem 3.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -368,6 +374,14 @@
       height: auto;
       opacity: 0.2;
       mix-blend-mode: multiply;
+    }
+
+    .footer-gdpr {
+      font-size: 0.58rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+      line-height: 1.6;
     }
 
     /* ── ANIMATIONS ── */
@@ -404,9 +418,12 @@
       nav { padding: 1.5rem 1.5rem; }
 
       footer {
-        padding: 1.5rem 1.5rem;
+        padding: 1.5rem 1.5rem 1.25rem;
+      }
+
+      .footer-top {
         flex-direction: column;
-        gap: 1.25rem;
+        gap: 1rem;
         text-align: center;
       }
 
@@ -533,8 +550,13 @@
 
   <!-- Footer -->
   <footer>
-    <span class="footer-copy">© 2026 Scotworks LLC &nbsp;·&nbsp; All rights reserved</span>
-    <img class="footer-logo" src="logo.png" alt="" aria-hidden="true">
+    <div class="footer-top">
+      <span class="footer-copy">© 2026 Scotworks LLC &nbsp;·&nbsp; All rights reserved</span>
+      <img class="footer-logo" src="logo.png" alt="" aria-hidden="true">
+    </div>
+    <p class="footer-gdpr">
+      This site uses cookies for analytics purposes. By continuing to use this site you consent to the use of cookies in accordance with our privacy policy.
+    </p>
   </footer>
 
   <script>
