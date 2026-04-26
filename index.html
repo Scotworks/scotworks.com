@@ -428,18 +428,10 @@
   <!-- Contact -->
   <section class="contact reveal" id="contact" aria-label="Contact">
     <span class="section-eyebrow">Get in Touch</span>
-
-    <!--
-      FORMSPREE SETUP (2 steps, ~2 minutes):
-        1. Create a free account at https://formspree.io
-        2. Create a new form — copy your Form ID (looks like "xpwzgkrd")
-        3. Replace YOUR_FORM_ID below with it
-      That's it. Submissions go straight to your inbox.
-    -->
     <form
       id="contact-form"
       class="contact-form"
-      action="https://formspree.io/f/YOUR_FORM_ID"
+      action="https://formspree.io/f/mzdywkvn"
       method="POST"
       novalidate
     >
@@ -521,6 +513,9 @@
       btn.disabled = true;
       errorMsg.style.display = 'none';
 
+      // Recoverable errors only: network, HTTP failure, or non-JSON error body.
+      // Success UI runs after this block so `catch` never restores controls that
+      // were already cleared from the live document.
       try {
         const res = await fetch(form.action, {
           method: 'POST',
@@ -528,19 +523,30 @@
           headers: { 'Accept': 'application/json' }
         });
 
-        if (res.ok) {
-          // Replace form with a graceful success note
-          form.innerHTML =
-            '<p class="form-success">Thank you — I\'ll be in touch soon.</p>';
-        } else {
-          const data = await res.json();
-          throw new Error(data?.errors?.[0]?.message || 'Submission failed');
+        if (!res.ok) {
+          let message = 'Submission failed';
+          try {
+            const data = await res.json();
+            message = data?.errors?.[0]?.message || message;
+          } catch {
+            // Response was not JSON; keep generic message
+          }
+          throw new Error(message);
         }
-      } catch {
+      } catch (err) {
         btn.textContent = 'Send message';
         btn.disabled = false;
         errorMsg.style.display = 'block';
+        console.warn('[contact-form] submission failed', err);
+        return;
       }
+
+      // Replace form with a graceful success note (DOM API avoids HTML injection)
+      form.replaceChildren();
+      const successEl = document.createElement('p');
+      successEl.className = 'form-success';
+      successEl.textContent = 'Thank you — I\'ll be in touch soon.';
+      form.appendChild(successEl);
     });
   </script>
 
