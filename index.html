@@ -385,7 +385,8 @@
 
   <!-- Navigation -->
   <nav>
-    <a href="/" class="nav-wordmark">Scotworks</a>
+    <!-- <a href="/" class="nav-wordmark">Scotworks</a> -->
+     <span class="nav-wordmark">Scotworks</span>
     <a href="#contact" class="nav-link">Contact</a>
   </nav>
 
@@ -467,7 +468,7 @@
           class="form-textarea"
           id="message"
           name="message"
-          placeholder="Tell me what you're working on…"
+          placeholder="Tell us what you're working on…"
           required
           rows="4"
         ></textarea>
@@ -545,7 +546,7 @@
       form.replaceChildren();
       const successEl = document.createElement('p');
       successEl.className = 'form-success';
-      successEl.textContent = 'Thank you — I\'ll be in touch soon.';
+      successEl.textContent = 'Thank you — we\'ll be in touch soon.';
       form.appendChild(successEl);
     });
   </script>
