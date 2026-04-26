@@ -3,8 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Scotworks — Independent strategic consulting.">
+  <meta name="description" content="Independent strategic consulting for founders, executives, and organizations navigating complex decisions.">
   <title>Scotworks — Strategic Consulting</title>
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://scotworks.com/">
+
+  <!-- Open Graph — controls link previews on LinkedIn, iMessage, Slack, etc. -->
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://scotworks.com/">
+  <meta property="og:site_name"   content="Scotworks">
+  <meta property="og:title"       content="Scotworks — Strategic Consulting">
+  <meta property="og:description" content="Independent strategic consulting for founders, executives, and organizations navigating complex decisions.">
+  <meta property="og:locale"      content="en_US">
+
+  <meta property="og:image" content="https://scotworks.com/og-image.png">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt"    content="Scotworks — Strategic Consulting">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Scotworks — Strategic Consulting">
+  <meta name="twitter:description" content="Independent strategic consulting for founders, executives, and organizations navigating complex decisions.">
+  <meta name="twitter:image" content="https://scotworks.com/og-image.png">
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-5HHVSWJ6');</script>
+  <!-- End Google Tag Manager -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -383,9 +413,15 @@
 </head>
 <body>
 
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5HHVSWJ6"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <!-- Navigation -->
   <nav>
-    <a href="/" class="nav-wordmark">Scotworks</a>
+    <!-- <a href="/" class="nav-wordmark">Scotworks</a> -->
+     <span class="nav-wordmark">Scotworks</span>
     <a href="#contact" class="nav-link">Contact</a>
   </nav>
 
@@ -428,18 +464,10 @@
   <!-- Contact -->
   <section class="contact reveal" id="contact" aria-label="Contact">
     <span class="section-eyebrow">Get in Touch</span>
-
-    <!--
-      FORMSPREE SETUP (2 steps, ~2 minutes):
-        1. Create a free account at https://formspree.io
-        2. Create a new form — copy your Form ID (looks like "xpwzgkrd")
-        3. Replace YOUR_FORM_ID below with it
-      That's it. Submissions go straight to your inbox.
-    -->
     <form
       id="contact-form"
       class="contact-form"
-      action="https://formspree.io/f/YOUR_FORM_ID"
+      action="https://formspree.io/f/mzdywkvn"
       method="POST"
       novalidate
     >
@@ -475,7 +503,7 @@
           class="form-textarea"
           id="message"
           name="message"
-          placeholder="Tell me what you're working on…"
+          placeholder="Tell us what you're working on…"
           required
           rows="4"
         ></textarea>
@@ -521,6 +549,9 @@
       btn.disabled = true;
       errorMsg.style.display = 'none';
 
+      // Recoverable errors only: network, HTTP failure, or non-JSON error body.
+      // Success UI runs after this block so `catch` never restores controls that
+      // were already cleared from the live document.
       try {
         const res = await fetch(form.action, {
           method: 'POST',
@@ -528,19 +559,30 @@
           headers: { 'Accept': 'application/json' }
         });
 
-        if (res.ok) {
-          // Replace form with a graceful success note
-          form.innerHTML =
-            '<p class="form-success">Thank you — I\'ll be in touch soon.</p>';
-        } else {
-          const data = await res.json();
-          throw new Error(data?.errors?.[0]?.message || 'Submission failed');
+        if (!res.ok) {
+          let message = 'Submission failed';
+          try {
+            const data = await res.json();
+            message = data?.errors?.[0]?.message || message;
+          } catch {
+            // Response was not JSON; keep generic message
+          }
+          throw new Error(message);
         }
-      } catch {
+      } catch (err) {
         btn.textContent = 'Send message';
         btn.disabled = false;
         errorMsg.style.display = 'block';
+        console.warn('[contact-form] submission failed', err);
+        return;
       }
+
+      // Replace form with a graceful success note (DOM API avoids HTML injection)
+      form.replaceChildren();
+      const successEl = document.createElement('p');
+      successEl.className = 'form-success';
+      successEl.textContent = 'Thank you — we\'ll be in touch soon.';
+      form.appendChild(successEl);
     });
   </script>
 
